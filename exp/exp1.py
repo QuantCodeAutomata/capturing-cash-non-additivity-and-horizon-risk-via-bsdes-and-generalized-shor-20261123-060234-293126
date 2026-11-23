@@ -31,14 +31,17 @@ from data.generate_synthetic import (
     terminal_normal,
 )
 from src import config
-from src.bsde_solver import grid_index, rho_from_bsde
+from src.bsde_solver import grid_index, rho_from_bsde_affine_in_z, solve_bsde_affine_in_z_extended
 from src.fully_dynamic import gamma_direct, gamma_theorem5
 
 RESULTS_DIR = Path(__file__).resolve().parents[1] / "results"
 
 
 # --------------------------------------------------------------------------
-# Driver g(t,y,z) = r_t * y^- + z (Example 6) and variants
+# Driver g(t,y,z) = h(t,y) + c(t)*z (Example 6) and variants: the driver is
+# affine in z, so it is solved with the Girsanov-based solver of
+# src.bsde_solver, which removes the linear-in-z term by a change of measure
+# instead of estimating Z by regression (see that module's docstring).
 # --------------------------------------------------------------------------
 def r_constant(t: float) -> float:
     return config.EXP1_R_CONSTANT
@@ -48,33 +51,34 @@ def r_time_varying(t: float) -> float:
     return config.EXP1_R_A0 + config.EXP1_R_A1 * np.sin(2.0 * np.pi * t)
 
 
-def make_driver(r_func):
-    """g(t,y,z) = r_t*y^- + z, Lipschitz with constant max(r_t, 1)."""
-
-    def driver(t, y, z):
-        return r_func(t) * np.maximum(-y, 0.0) + z
-
-    return driver
+def c_one(_t: float) -> float:
+    return 1.0
 
 
-def make_driver_nonnormalized(r_func):
-    """gbar(t,y,z) = r_t*y^- + z + 1, i.e. gbar(t,0,0) = 1 != 0."""
+def h_example6(r_func):
+    """h(t,y) = r_t*y^-, g(t,y,z) = h(t,y) + z (Example 6), Lipschitz with
+    constant max(r_t, 1)."""
 
-    def driver(t, y, z):
-        return r_func(t) * np.maximum(-y, 0.0) + z + 1.0
+    def h(t, y):
+        return r_func(t) * np.maximum(-y, 0.0)
 
-    return driver
+    return h
 
 
-def make_driver_restriction():
-    """g(t,y,z) = z: independent of y, and g(t,y,0) = 0 for every y, so
-    Proposition 4's restriction property applies and the generated risk
-    measure is cash additive."""
+def h_nonnormalized(r_func):
+    """hbar(t,y) = r_t*y^- + 1, so gbar(t,0,0) = 1 != 0 (non-normalized)."""
 
-    def driver(t, y, z):
-        return z
+    def h(t, y):
+        return r_func(t) * np.maximum(-y, 0.0) + 1.0
 
-    return driver
+    return h
+
+
+def h_restriction(t, y):
+    """h(t,y) = 0: g(t,y,z) = z is independent of y and g(t,y,0) = 0 for
+    every y, so Proposition 4's restriction property applies and the
+    generated risk measure is cash additive."""
+    return np.zeros_like(y)
 
 
 # --------------------------------------------------------------------------
@@ -89,20 +93,20 @@ def terminal_conditions(bm_path, times, u, n_paths, seed):
     }
 
 
-def solve_rho(times, bm, t, u, driver, x_at_u, basis_degree):
-    rho_t, _, y_full = rho_from_bsde(times, bm, t, u, driver, -np.asarray(x_at_u), basis_degree)
+def solve_rho(times, bm, t, u, h_func, c_func, x_at_u, basis_degree):
+    rho_t, y_full = rho_from_bsde_affine_in_z(times, bm, t, u, h_func, c_func, -np.asarray(x_at_u), basis_degree)
     return rho_t, y_full
 
 
-def cash_subadditivity_check(times, bm, t, u, driver, x_at_u, m_list, basis_degree):
+def cash_subadditivity_check(times, bm, t, u, h_func, c_func, x_at_u, m_list, basis_degree):
     """For m >= 0 verify rho_tu(X + m) >= rho_tu(X) - m (Definition 1, cash
     subadditivity): compare path-averaged rho since Y_t is F_t-measurable
     and nearly path-independent for t close to 0."""
-    rho_base, _ = solve_rho(times, bm, t, u, driver, x_at_u, basis_degree)
+    rho_base, _ = solve_rho(times, bm, t, u, h_func, c_func, x_at_u, basis_degree)
     base_mean = float(np.mean(rho_base))
     rows = []
     for m in m_list:
-        rho_m, _ = solve_rho(times, bm, t, u, driver, np.asarray(x_at_u) + m, basis_degree)
+        rho_m, _ = solve_rho(times, bm, t, u, h_func, c_func, np.asarray(x_at_u) + m, basis_degree)
         shifted_mean = float(np.mean(rho_m))
         holds = shifted_mean >= base_mean - m - 1e-2
         rows.append({"m": m, "rho_X": base_mean, "rho_X_plus_m": shifted_mean,
@@ -110,14 +114,22 @@ def cash_subadditivity_check(times, bm, t, u, driver, x_at_u, m_list, basis_degr
     return rows
 
 
-def h_longevity_and_gamma(times, bm, t, u, v, driver, r_func, x_at_u, basis_degree):
+def h_longevity_and_gamma(times, bm, t, u, v, h_func, c_func, r_func, x_at_u, basis_degree):
     """Compute rho_tu, rho_tv, the direct gamma = rho_tv - rho_tu, and the
-    explicit Theorem 5 formula, by pasting the bar-Y process of Eq. (17)."""
+    explicit Theorem 5 formula, by pasting the bar-Y process of Eq. (17).
+
+    rho_tv (the genuine Y_t^v) is computed by
+    :func:`solve_bsde_affine_in_z_extended`: because X is F_u-measurable,
+    the BSDE on (u, v] carries Z = 0 and reduces to a per-path backward ODE
+    (see that function's docstring), which is solved exactly instead of by
+    a single-state regression that cannot represent a payoff depending on
+    an earlier time u.
+    """
     it, iu, iv = grid_index(times, t), grid_index(times, u), grid_index(times, v)
     minus_x = -np.asarray(x_at_u)
 
-    rho_tu, Y_tu = solve_rho(times, bm, t, u, driver, x_at_u, basis_degree)
-    rho_tv, Y_tv = solve_rho(times, bm, t, v, driver, x_at_u, basis_degree)
+    rho_tu, Y_tu = solve_rho(times, bm, t, u, h_func, c_func, x_at_u, basis_degree)
+    rho_tv, Y_uv, Y_tv = solve_bsde_affine_in_z_extended(times, bm, t, u, v, h_func, c_func, minus_x, basis_degree)
 
     n_tail = iv - iu
     bar_y = np.concatenate([Y_tu, np.repeat(minus_x[:, None], n_tail, axis=1)], axis=1)
@@ -148,9 +160,8 @@ def main() -> None:
     bm = paths[:, :, 0]
     print(f"Simulated {n_paths} paths, {n_steps} steps, T={config.T_HORIZON}, d={config.BM_DIMENSION}")
 
-    driver_g = make_driver(r_constant)
-    driver_gbar = make_driver_nonnormalized(r_constant)
-    driver_restriction = make_driver_restriction()
+    h_g = h_example6(r_constant)
+    h_gbar = h_nonnormalized(r_constant)
 
     report: dict = {"n_paths": n_paths, "n_steps": n_steps, "r_constant": config.EXP1_R_CONSTANT}
 
@@ -159,7 +170,7 @@ def main() -> None:
     for u in config.EXP1_U_LIST + config.EXP1_V_LIST:
         term = terminal_conditions(bm, times, u, n_paths, config.RANDOM_SEED)
         for name, x_at_u in term.items():
-            rho_t, _ = solve_rho(times, bm, 0.0, u, driver_g, x_at_u, config.BASIS_DEGREE)
+            rho_t, _ = solve_rho(times, bm, 0.0, u, h_g, c_one, x_at_u, config.BASIS_DEGREE)
             rho_table.append({"t": 0.0, "u": u, "X": name, "rho_tu_mean": float(np.mean(rho_t)),
                                "rho_tu_std": float(np.std(rho_t))})
     report["rho_tu_table"] = rho_table
@@ -170,7 +181,7 @@ def main() -> None:
         u = config.EXP1_U_LIST[0]
         # X = B_u, a genuine F_u^B-measurable functional of the path (see note above).
         x_at_u = terminal_conditions(bm, times, u, n_paths, config.RANDOM_SEED)["B_u"]
-        rows = cash_subadditivity_check(times, bm, t, u, driver_g, x_at_u, config.EXP1_M_SUBADDITIVITY, config.BASIS_DEGREE)
+        rows = cash_subadditivity_check(times, bm, t, u, h_g, c_one, x_at_u, config.EXP1_M_SUBADDITIVITY, config.BASIS_DEGREE)
         for row in rows:
             row.update({"t": t, "u": u})
         subadd_rows.extend(rows)
@@ -195,7 +206,7 @@ def main() -> None:
                 # correction that Theorem 5's explicit formula relies on.
                 x_at_u = terminal_conditions(bm, times, u, n_paths, config.RANDOM_SEED)["B_u"]
                 rho_tu, rho_tv, gamma_dir, gamma_formula = h_longevity_and_gamma(
-                    times, bm, t, u, v, driver_g, r_constant, x_at_u, config.BASIS_DEGREE
+                    times, bm, t, u, v, h_g, c_one, r_constant, x_at_u, config.BASIS_DEGREE
                 )
                 rel_err = float(np.mean(np.abs(gamma_dir - gamma_formula)) / (np.mean(np.abs(gamma_dir)) + 1e-8))
                 longevity_rows.append({
@@ -214,8 +225,8 @@ def main() -> None:
 
     # 8. Non-normalized driver ------------------------------------------------
     zero = terminal_constant(n_paths, 0.0)
-    rho_zero_g, _ = solve_rho(times, bm, 0.0, config.EXP1_U_LIST[0], driver_g, zero, config.BASIS_DEGREE)
-    rho_zero_gbar, _ = solve_rho(times, bm, 0.0, config.EXP1_U_LIST[0], driver_gbar, zero, config.BASIS_DEGREE)
+    rho_zero_g, _ = solve_rho(times, bm, 0.0, config.EXP1_U_LIST[0], h_g, c_one, zero, config.BASIS_DEGREE)
+    rho_zero_gbar, _ = solve_rho(times, bm, 0.0, config.EXP1_U_LIST[0], h_gbar, c_one, zero, config.BASIS_DEGREE)
     report["normalization"] = {
         "rho_tu_zero_normalized_driver": float(np.mean(rho_zero_g)),
         "rho_tu_zero_nonnormalized_driver": float(np.mean(rho_zero_gbar)),
@@ -229,15 +240,15 @@ def main() -> None:
     restriction_rows = []
     u, v = config.EXP1_U_LIST[0], config.EXP1_V_LIST[-1]
     x_at_u = terminal_conditions(bm, times, u, n_paths, config.RANDOM_SEED)["B_u"]
-    rho_tu, _ = solve_rho(times, bm, 0.0, u, driver_restriction, x_at_u, config.BASIS_DEGREE)
-    rho_tv, _ = solve_rho(times, bm, 0.0, v, driver_restriction, x_at_u, config.BASIS_DEGREE)
+    rho_tu, _ = solve_rho(times, bm, 0.0, u, h_restriction, c_one, x_at_u, config.BASIS_DEGREE)
+    rho_tv, _, _ = solve_bsde_affine_in_z_extended(times, bm, 0.0, u, v, h_restriction, c_one, -x_at_u, config.BASIS_DEGREE)
     restriction_rows.append({
         "u": u, "v": v,
         "rho_tu_mean": float(np.mean(rho_tu)), "rho_tv_mean": float(np.mean(rho_tv)),
         "restriction_holds": bool(abs(np.mean(rho_tu) - np.mean(rho_tv)) < 5e-2),
     })
     m = 0.7
-    rho_tu_shift, _ = solve_rho(times, bm, 0.0, u, driver_restriction, x_at_u + m, config.BASIS_DEGREE)
+    rho_tu_shift, _ = solve_rho(times, bm, 0.0, u, h_restriction, c_one, x_at_u + m, config.BASIS_DEGREE)
     restriction_rows.append({
         "cash_additivity_check_m": m,
         "rho_tu_X": float(np.mean(rho_tu)),
