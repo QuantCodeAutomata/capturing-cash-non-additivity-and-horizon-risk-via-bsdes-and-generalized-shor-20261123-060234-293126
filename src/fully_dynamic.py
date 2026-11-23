@@ -95,29 +95,21 @@ def gamma_theorem5(
     g_minus_x_zero_vals: np.ndarray,
     basis_degree: int = 5,
 ) -> np.ndarray:
-    """Explicit h-longevity index of Theorem 5,
+    """Explicit h-longevity index of Theorem 5 (Section 2.1, equation
+    preceding/within Theorem 5):
 
-        gamma(t,u,v,X) = E_{Qtilde_X}[ int_u^v exp(int_t^s Delta_y g(r) dr)
-                           g(s,-X,0) ds | F_t ]
-                        = E_P[ W_tv * int_u^v exp(int_t^s Delta_y g(r) dr)
-                           g(s,-X,0) ds | F_t ],
+        gamma(t,u,v,X) = E_{Qtilde_X}[ exp(int_t^v Delta_y g(s) ds)
+                            int_u^v g(s,-X,0) ds | F_t ]
+                       = E_P[ W_tv * exp(int_t^v Delta_y g(s) ds)
+                            int_u^v g(s,-X,0) ds | F_t ],
 
-    with Girsanov density (equation preceding Theorem 5)
+    with Girsanov density
 
         W_tv = exp{ -1/2 int_t^v |Delta_z g(s)|^2 ds + int_t^v Delta_z g(s) dB_s }.
 
-    The running (s-dependent, not fixed at v) exponential discount factor is
-    the solution of the linear BSDE with source term that underlies the
-    proof of Theorem 5 (the comparison tilde_Y_s = Y_s^v - bar_Y_s^u solves
-    d(tilde_Y_s) = -Delta_y g(s) tilde_Y_s ds - g(s,-X,0) 1_{(u,v]}(s) ds +
-    Z_s^v dB_s^{Qtilde}, tilde_Y_v = 0, whose standard linear-BSDE-with-
-    running-cost representation integrates the discount factor exp(int_t^s
-    Delta_y g(r)dr) against the source term g(s,-X,0) under the integral
-    sign). This was checked against a closed-form deterministic case
-    (constant X, driver g=r y^- + z with r constant, so Z = 0 and Qtilde=P):
-    the running-exponent form reproduces rho_tv(X) - rho_tu(X) exactly,
-    while discounting by the fixed factor exp(int_t^v Delta_y g(r)dr) does
-    not.
+    Theorem 5 pulls the exponential e^{int_t^v Delta_y g(s) ds} out of the
+    inner integral: it is a single factor over the *whole* interval [t, v],
+    not a running discount re-evaluated at each s inside int_u^v (·) ds.
 
     This implementation assumes Delta_z g(s) is a known deterministic
     constant over ``[t, v]`` (true for the Example 6 driver g = r_t y^- + z,
@@ -127,25 +119,22 @@ def gamma_theorem5(
     Parameters
     ----------
     delta_y_vals: array (n_paths, n_steps_tv + 1), Delta_y g(s) evaluated at
-        every grid point of ``[t, v]`` (Eq. (18), from the bar-Y extension
+        every grid point of ``[t, v]`` (Eq. (19), from the bar-Y extension
         (17) of the BSDE solutions on [t,u] and [t,v]).
-    delta_z_const: constant value of Delta_z g(s) on [t, v].
+    delta_z_const: constant value of Delta_z g(s) on [t, v] (Eq. (18)).
     g_minus_x_zero_vals: array (n_paths, n_steps_tv + 1), g(s, -X, 0) at
         every grid point of ``[t, v]`` (only ``[u, v]`` is integrated).
     """
-    from scipy.integrate import cumulative_trapezoid
-
     it = grid_index(times, t)
     iv = grid_index(times, v)
     sub_times = times[it : iv + 1]
 
-    # Running exponent int_t^s Delta_y g(r) dr at every grid point s in [t, v].
-    cum_integral = cumulative_trapezoid(delta_y_vals, sub_times, axis=1, initial=0.0)
-    running_discount = np.exp(cum_integral)
+    # Single exponent int_t^v Delta_y g(s) ds over the whole interval [t, v].
+    exponent = np.trapz(delta_y_vals, sub_times, axis=1)
+    discount = np.exp(exponent)
 
     iu_local = grid_index(sub_times, u)
-    integrand = running_discount[:, iu_local:] * g_minus_x_zero_vals[:, iu_local:]
-    inner_integral = np.trapz(integrand, sub_times[iu_local:], axis=1)
+    inner_integral = np.trapz(g_minus_x_zero_vals[:, iu_local:], sub_times[iu_local:], axis=1)
 
     b_t = bm_path[:, it]
     b_v = bm_path[:, iv]
@@ -153,7 +142,7 @@ def gamma_theorem5(
         -0.5 * delta_z_const**2 * (v - t) + delta_z_const * (b_v - b_t)
     )
 
-    payoff = girsanov_weight * inner_integral
+    payoff = girsanov_weight * discount * inner_integral
     return conditional_expectation(payoff, times, bm_path, t, basis_degree)
 
 

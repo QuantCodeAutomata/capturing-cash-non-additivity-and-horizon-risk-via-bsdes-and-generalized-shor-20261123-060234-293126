@@ -199,9 +199,9 @@
       "rho_tv_mean": -0.4896600012055273,
       "h_longevity_holds": true,
       "gamma_direct_mean": -0.001495578635351713,
-      "gamma_theorem5_mean": 0.00727670718579539,
+      "gamma_theorem5_mean": 0.007231460075388483,
       "gamma_nonneg": true,
-      "relative_error_gamma": 5.865440278024149
+      "relative_error_gamma": 5.835186564310771
     },
     {
       "t": 0.0,
@@ -211,9 +211,9 @@
       "rho_tv_mean": -0.47949865798096614,
       "h_longevity_holds": true,
       "gamma_direct_mean": 0.008665764589209257,
-      "gamma_theorem5_mean": 0.014479752151561451,
+      "gamma_theorem5_mean": 0.01430010441284279,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.67091377723947
+      "relative_error_gamma": 0.650183058148026
     },
     {
       "t": 0.0,
@@ -235,9 +235,9 @@
       "rho_tv_mean": -0.7211896729137821,
       "h_longevity_holds": true,
       "gamma_direct_mean": 0.002350151646363541,
-      "gamma_theorem5_mean": 0.01014561864608132,
+      "gamma_theorem5_mean": 0.010082451804948796,
       "gamma_nonneg": true,
-      "relative_error_gamma": 3.3169918383188177
+      "relative_error_gamma": 3.290114180252078
     },
     {
       "t": 0.25,
@@ -247,9 +247,9 @@
       "rho_tv_mean": -0.33080977403788797,
       "h_longevity_holds": false,
       "gamma_direct_mean": -0.0834183337178253,
-      "gamma_theorem5_mean": 0.005295665865830795,
+      "gamma_theorem5_mean": 0.0052627817537992385,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.9940143160757893
+      "relative_error_gamma": 0.9940476700192377
     },
     {
       "t": 0.25,
@@ -259,9 +259,9 @@
       "rho_tv_mean": -0.36475380403125407,
       "h_longevity_holds": false,
       "gamma_direct_mean": -0.11736236371119146,
-      "gamma_theorem5_mean": 0.01055296307594103,
+      "gamma_theorem5_mean": 0.010422204975517024,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.9907100957114704
+      "relative_error_gamma": 0.9908123167506543
     },
     {
       "t": 0.25,
@@ -283,9 +283,9 @@
       "rho_tv_mean": -0.5470024622537055,
       "h_longevity_holds": false,
       "gamma_direct_mean": -0.05942646975795618,
-      "gamma_theorem5_mean": 0.008057770668764116,
+      "gamma_theorem5_mean": 0.00800763744874752,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.9994601120292443
+      "relative_error_gamma": 0.9994483902639325
     },
     {
       "t": 0.5,
@@ -307,9 +307,9 @@
       "rho_tv_mean": -0.36695117175125963,
       "h_longevity_holds": false,
       "gamma_direct_mean": -0.12214554993656884,
-      "gamma_theorem5_mean": 0.00600522136572654,
+      "gamma_theorem5_mean": 0.005967895504875176,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.9945895143405897
+      "relative_error_gamma": 0.9946174421817326
     }
   ],
   "normalization": {
