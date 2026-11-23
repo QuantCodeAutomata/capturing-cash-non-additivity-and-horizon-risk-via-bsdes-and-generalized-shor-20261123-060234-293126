@@ -26,8 +26,9 @@ def simulate_brownian_paths(
     n_paths: number of Monte Carlo paths.
     n_steps: number of equally spaced time steps on ``[0, horizon]``.
     horizon: terminal time ``T`` of the simulation grid.
-    d: dimension of the Brownian motion (the paper's numerical examples use
-        ``d = 1``; see uncertainties in experiment exp_1).
+    d: dimension of the Brownian motion (the paper does not prescribe a
+        value for its numerical examples; set to ``d = 1`` throughout, see
+        ``src/config.py``).
     seed: seed of the random generator, for reproducibility.
 
     Returns

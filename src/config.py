@@ -23,7 +23,7 @@ RANDOM_SEED = 20261123  # seed for reproducibility (not specified in the paper)
 # exp_1: Lipschitz BSDE, cash subadditivity, h-longevity, Theorem 5 formula
 # --------------------------------------------------------------------------
 EXP1_N_PATHS_PAPER = 100_000  # Monte Carlo paths, experiment exp_1 data requirements
-EXP1_N_PATHS_RUN = 20_000  # paths used for the executed run (runtime budget, see README/RESULTS)
+EXP1_N_PATHS_RUN = 20_000  # paths used for the executed run (reduced from the paper's value; see README/RESULTS)
 EXP1_N_STEPS = 100  # time discretization steps on [0, T], experiment exp_1 data requirements
 EXP1_R_CONSTANT = 0.05  # constant interest rate r_t, Example 6 (value not prescribed by the paper)
 EXP1_R_A0 = 0.03  # level of the time-varying rate r_t = a0 + a1*sin(2*pi*t) (not prescribed)
@@ -37,7 +37,7 @@ EXP1_M_SUBADDITIVITY = [0.0, 0.25, 0.5, 1.0]  # cash amounts m used in the subad
 # exp_2: hq-entropic risk measure on losses, Eq. (6)/(26), sensitivity study
 # --------------------------------------------------------------------------
 EXP2_N_PATHS_PAPER = 200_000  # Monte Carlo paths, experiment exp_2 data requirements
-EXP2_N_PATHS_RUN = 40_000  # paths used for the executed run (runtime budget, see README/RESULTS)
+EXP2_N_PATHS_RUN = 40_000  # paths used for the executed run (reduced from the paper's value; see README/RESULTS)
 EXP2_N_STEPS = 200  # time discretization steps on [0, T], experiment exp_2 data requirements
 EXP2_Q_GRID = [0.1, 0.3, 0.5, 0.7, 0.9, 0.95, 0.99]  # q in (0,1), experiment exp_2 data requirements
 EXP2_BETA_GRID = [0.0, 0.5, 1.0]  # severity buffer beta >= 0, experiment exp_2 data requirements
@@ -54,7 +54,7 @@ EXP2_V_LIST = [0.75, 1.0]
 # exp_3: generalized shortfall risk measures, Definition 16, Proposition 17
 # --------------------------------------------------------------------------
 EXP3_N_SAMPLES_PAPER = 500_000  # Monte Carlo samples, experiment exp_3 data requirements
-EXP3_N_SAMPLES_RUN = 200_000  # samples used for the executed run (runtime budget, see README/RESULTS)
+EXP3_N_SAMPLES_RUN = 200_000  # samples used for the executed run (reduced from the paper's value; see README/RESULTS)
 EXP3_BETA_GRID = [0.5, 0.7, 0.9, 1.0]  # linear aggregator f(x,m)=beta*x+m, Example 19 i)
 EXP3_NU_GRID = [0.1, 0.3, 0.5, 0.7, 0.9]  # exponential aggregator f(x,m)=1-exp(-nu*x-m), Example 19 ii)
 EXP3_B_TARGET_GRID = [0.0, 0.5, 0.9, 0.95, 0.99]  # target levels B, experiment exp_3 data requirements
@@ -70,7 +70,7 @@ EXP3_THETA_GRID_POINTS = 61  # number of tilting parameters theta in the dual-re
 # equivalent (Remark 32)
 # --------------------------------------------------------------------------
 EXP4_N_SAMPLES_PAPER = 500_000  # Monte Carlo samples, experiment exp_4 data requirements
-EXP4_N_SAMPLES_RUN = 200_000  # samples used for the executed run (runtime budget, see README/RESULTS)
+EXP4_N_SAMPLES_RUN = 200_000  # samples used for the executed run (reduced from the paper's value; see README/RESULTS)
 EXP4_Q_GRID = [0.3, 0.5, 0.7]  # q grid, experiment exp_4 data requirements
 EXP4_BETA_GRID = [0.0, 0.5]  # beta grid, experiment exp_4 data requirements
 EXP4_ALPHA_Q_GRID = [0.0, 1.0]  # alpha_q grid, experiment exp_4 data requirements
@@ -86,7 +86,7 @@ EXP4_M_GRID = [-3.0, -1.5, -0.5, 0.0, 0.5, 1.0, 2.0]  # acceptance-set levels m 
 # Proposition 29, Proposition 30)
 # --------------------------------------------------------------------------
 EXP5_N_PATHS_PAPER = 500_000  # Monte Carlo paths, experiment exp_5 data requirements
-EXP5_N_PATHS_RUN = 100_000  # paths used for the executed run (runtime budget, see README/RESULTS)
+EXP5_N_PATHS_RUN = 100_000  # paths used for the executed run (reduced from the paper's value; see README/RESULTS)
 EXP5_N_STEPS = 100  # time discretization steps on [0, T] (not prescribed; matches exp_1 grid)
 EXP5_CRRA_GAMMAS = [0.5, 1.5, 2.0, 3.0]  # CRRA risk-aversion grid, experiment exp_5 data requirements
 EXP5_A_CONST_GRID = [0.0, 0.01, 0.05, 0.1]  # constant horizon function a(t), experiment exp_5 data requirements
@@ -99,7 +99,7 @@ EXP5_V_LIST = [0.75, 1.0]
 # confidence level (Example 15, Proposition 14)
 # --------------------------------------------------------------------------
 EXP6_N_PATHS_PAPER = 1_000_000  # Monte Carlo paths, experiment exp_6 data requirements
-EXP6_N_PATHS_RUN = 500_000  # paths used for the executed run (runtime budget, see README/RESULTS)
+EXP6_N_PATHS_RUN = 500_000  # paths used for the executed run (reduced from the paper's value; see README/RESULTS)
 EXP6_MU_GRID = [0.0, 0.01, 0.05]  # drift of the normal P&L, experiment exp_6 data requirements
 EXP6_SIGMA_GRID = [0.1, 0.2, 0.3]  # volatility of the normal P&L, experiment exp_6 data requirements
 EXP6_ALPHA0_GRID = [0.05, 0.01]  # base confidence level alpha_0, experiment exp_6 data requirements

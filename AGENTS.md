@@ -4,7 +4,7 @@ Guide for coding agents and contributors working on this repository.
 
 ## What this repository implements
 
-A numerical replication of selected experiments from Di Nunno, G. and
+A numerical replication of six experiments from Di Nunno, G. and
 Rosazza Gianin, E., "Capturing cash non-additivity and horizon risk via
 BSDEs and generalized shortfall": fully-dynamic risk measures built from
 BSDEs with Lipschitz/quadratic drivers, the `hq`-entropic risk measure on

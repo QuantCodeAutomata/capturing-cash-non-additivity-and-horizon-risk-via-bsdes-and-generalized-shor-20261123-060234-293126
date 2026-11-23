@@ -311,7 +311,7 @@ def main() -> None:
         "--full",
         action="store_true",
         help="Use the paper-scale Monte Carlo sample size "
-        f"(N={config.EXP3_N_SAMPLES_PAPER}) instead of the reduced runtime budget "
+        f"(N={config.EXP3_N_SAMPLES_PAPER}) instead of the executed sample size "
         f"(N={config.EXP3_N_SAMPLES_RUN}).",
     )
     args = parser.parse_args()
