@@ -1,5 +1,5 @@
 {
-  "n_paths": 20000,
+  "n_paths": 100000,
   "n_steps": 100,
   "r_constant": 0.05,
   "rho_tu_table": [
@@ -14,21 +14,49 @@
       "t": 0.0,
       "u": 0.5,
       "X": "constant_1.0",
-      "rho_tu_mean": -0.9758610001782878,
-      "rho_tu_std": 3.3306690738754696e-16
+      "rho_tu_mean": -0.9743108101212721,
+      "rho_tu_std": 5.551115123125783e-16
     },
     {
       "t": 0.0,
       "u": 0.5,
       "X": "normal_0_1",
-      "rho_tu_mean": 0.006987010555068605,
-      "rho_tu_std": 0.0
+      "rho_tu_mean": -0.0010302057987435673,
+      "rho_tu_std": 2.168404344971009e-19
     },
     {
       "t": 0.0,
       "u": 0.5,
       "X": "B_u",
-      "rho_tu_mean": -0.48492133650925945,
+      "rho_tu_mean": -0.4850225545312847,
+      "rho_tu_std": 1.1102230246251565e-16
+    },
+    {
+      "t": 0.0,
+      "u": 0.75,
+      "X": "constant_0.0",
+      "rho_tu_mean": 0.0,
+      "rho_tu_std": 0.0
+    },
+    {
+      "t": 0.0,
+      "u": 0.75,
+      "X": "constant_1.0",
+      "rho_tu_mean": -0.9613078725032712,
+      "rho_tu_std": 5.551115123125783e-16
+    },
+    {
+      "t": 0.0,
+      "u": 0.75,
+      "X": "normal_0_1",
+      "rho_tu_mean": -0.002130166469069359,
+      "rho_tu_std": 0.0
+    },
+    {
+      "t": 0.0,
+      "u": 0.75,
+      "X": "B_u",
+      "rho_tu_mean": -0.7176424185451663,
       "rho_tu_std": 0.0
     },
     {
@@ -42,50 +70,22 @@
       "t": 0.0,
       "u": 0.75,
       "X": "constant_1.0",
-      "rho_tu_mean": -0.9644413936332515,
-      "rho_tu_std": 4.440892098500626e-16
+      "rho_tu_mean": -0.9613078725032712,
+      "rho_tu_std": 5.551115123125783e-16
     },
     {
       "t": 0.0,
       "u": 0.75,
       "X": "normal_0_1",
-      "rho_tu_mean": 0.01059049583172153,
+      "rho_tu_mean": -0.002130166469069359,
       "rho_tu_std": 0.0
     },
     {
       "t": 0.0,
       "u": 0.75,
       "X": "B_u",
-      "rho_tu_mean": -0.7226296678862829,
-      "rho_tu_std": 2.220446049250313e-16
-    },
-    {
-      "t": 0.0,
-      "u": 0.75,
-      "X": "constant_0.0",
-      "rho_tu_mean": 0.0,
+      "rho_tu_mean": -0.7176424185451663,
       "rho_tu_std": 0.0
-    },
-    {
-      "t": 0.0,
-      "u": 0.75,
-      "X": "constant_1.0",
-      "rho_tu_mean": -0.9644413936332515,
-      "rho_tu_std": 4.440892098500626e-16
-    },
-    {
-      "t": 0.0,
-      "u": 0.75,
-      "X": "normal_0_1",
-      "rho_tu_mean": 0.01059049583172153,
-      "rho_tu_std": 0.0
-    },
-    {
-      "t": 0.0,
-      "u": 0.75,
-      "X": "B_u",
-      "rho_tu_mean": -0.7226296678862829,
-      "rho_tu_std": 2.220446049250313e-16
     },
     {
       "t": 0.0,
@@ -98,93 +98,93 @@
       "t": 0.0,
       "u": 1.0,
       "X": "constant_1.0",
-      "rho_tu_mean": -0.9554070018897591,
-      "rho_tu_std": 2.220446049250313e-16
+      "rho_tu_mean": -0.948050997397184,
+      "rho_tu_std": 0.0
     },
     {
       "t": 0.0,
       "u": 1.0,
       "X": "normal_0_1",
-      "rho_tu_mean": 0.01104344994164799,
-      "rho_tu_std": 1.734723475976807e-18
+      "rho_tu_mean": 0.002067809080331055,
+      "rho_tu_std": 8.673617379884035e-19
     },
     {
       "t": 0.0,
       "u": 1.0,
       "X": "B_u",
-      "rho_tu_mean": -0.9581813443171544,
+      "rho_tu_mean": -0.9471830743719137,
       "rho_tu_std": 4.440892098500626e-16
     }
   ],
   "cash_subadditivity": [
     {
       "m": 0.0,
-      "rho_X": -0.48492133650925945,
-      "rho_X_plus_m": -0.48492133650925945,
-      "rho_X_minus_m_bound": -0.48492133650925945,
+      "rho_X": -0.4850225545312847,
+      "rho_X_plus_m": -0.4850225545312847,
+      "rho_X_minus_m_bound": -0.4850225545312847,
       "cash_subadditivity_holds": true,
       "t": 0.0,
       "u": 0.5
     },
     {
       "m": 0.25,
-      "rho_X": -0.48492133650925945,
-      "rho_X_plus_m": -0.7295089983829014,
-      "rho_X_minus_m_bound": -0.7349213365092595,
+      "rho_X": -0.4850225545312847,
+      "rho_X_plus_m": -0.7292240290504476,
+      "rho_X_minus_m_bound": -0.7350225545312847,
       "cash_subadditivity_holds": true,
       "t": 0.0,
       "u": 0.5
     },
     {
       "m": 0.5,
-      "rho_X": -0.48492133650925945,
-      "rho_X_plus_m": -0.9737554526363185,
-      "rho_X_minus_m_bound": -0.9849213365092595,
+      "rho_X": -0.4850225545312847,
+      "rho_X_plus_m": -0.9730835136075199,
+      "rho_X_minus_m_bound": -0.9850225545312847,
       "cash_subadditivity_holds": true,
       "t": 0.0,
       "u": 0.5
     },
     {
       "m": 1.0,
-      "rho_X": -0.48492133650925945,
-      "rho_X_plus_m": -1.4618451266077588,
-      "rho_X_minus_m_bound": -1.4849213365092595,
+      "rho_X": -0.4850225545312847,
+      "rho_X_plus_m": -1.4604007669987482,
+      "rho_X_minus_m_bound": -1.4850225545312847,
       "cash_subadditivity_holds": true,
       "t": 0.0,
       "u": 0.5
     },
     {
       "m": 0.0,
-      "rho_X": -0.2482794135729223,
-      "rho_X_plus_m": -0.2482794135729223,
-      "rho_X_minus_m_bound": -0.2482794135729223,
+      "rho_X": -0.2429675653890601,
+      "rho_X_plus_m": -0.2429675653890601,
+      "rho_X_minus_m_bound": -0.2429675653890601,
       "cash_subadditivity_holds": true,
       "t": 0.25,
       "u": 0.5
     },
     {
       "m": 0.25,
-      "rho_X": -0.2482794135729223,
-      "rho_X_plus_m": -0.4972234507852453,
-      "rho_X_minus_m_bound": -0.49827941357292227,
+      "rho_X": -0.2429675653890601,
+      "rho_X_plus_m": -0.4902815344507031,
+      "rho_X_minus_m_bound": -0.49296756538906006,
       "cash_subadditivity_holds": true,
       "t": 0.25,
       "u": 0.5
     },
     {
       "m": 0.5,
-      "rho_X": -0.2482794135729223,
-      "rho_X_plus_m": -0.745803050739668,
-      "rho_X_minus_m_bound": -0.7482794135729223,
+      "rho_X": -0.2429675653890601,
+      "rho_X_plus_m": -0.7372325193847239,
+      "rho_X_minus_m_bound": -0.7429675653890601,
       "cash_subadditivity_holds": true,
       "t": 0.25,
       "u": 0.5
     },
     {
       "m": 1.0,
-      "rho_X": -0.2482794135729223,
-      "rho_X_plus_m": -1.2423474201932236,
-      "rho_X_minus_m_bound": -1.2482794135729223,
+      "rho_X": -0.2429675653890601,
+      "rho_X_plus_m": -1.2305242947982242,
+      "rho_X_minus_m_bound": -1.2429675653890602,
       "cash_subadditivity_holds": true,
       "t": 0.25,
       "u": 0.5
@@ -195,32 +195,32 @@
       "t": 0.0,
       "u": 0.5,
       "v": 0.75,
-      "rho_tu_mean": -0.48492133650925945,
-      "rho_tv_mean": -0.4776707672704586,
+      "rho_tu_mean": -0.4850225545312847,
+      "rho_tv_mean": -0.47776946449525853,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.0072505692388008525,
-      "gamma_theorem5_mean": 0.007232790970542271,
+      "gamma_direct_mean": 0.007253090036026366,
+      "gamma_theorem5_mean": 0.007212885450095575,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.0024519790313365978
+      "relative_error_gamma": 0.005543089952033203
     },
     {
       "t": 0.0,
       "u": 0.5,
       "v": 1.0,
-      "rho_tu_mean": -0.48492133650925945,
-      "rho_tv_mean": -0.47051022976295953,
+      "rho_tu_mean": -0.4850225545312847,
+      "rho_tv_mean": -0.47060643901875737,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.014411106746300084,
-      "gamma_theorem5_mean": 0.014303384343819335,
+      "gamma_direct_mean": 0.014416115512527361,
+      "gamma_theorem5_mean": 0.014270642506364535,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.007474951759613365
+      "relative_error_gamma": 0.010090991926812242
     },
     {
       "t": 0.0,
       "u": 0.75,
       "v": 0.75,
-      "rho_tu_mean": -0.7226296678862829,
-      "rho_tv_mean": -0.7226296678862829,
+      "rho_tu_mean": -0.7176424185451663,
+      "rho_tv_mean": -0.7176424185451663,
       "h_longevity_holds": true,
       "gamma_direct_mean": 0.0,
       "gamma_theorem5_mean": 0.0,
@@ -231,44 +231,44 @@
       "t": 0.0,
       "u": 0.75,
       "v": 1.0,
-      "rho_tu_mean": -0.7226296678862829,
-      "rho_tv_mean": -0.7125219896412129,
+      "rho_tu_mean": -0.7176424185451663,
+      "rho_tv_mean": -0.7075978254774099,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.010107678245070195,
-      "gamma_theorem5_mean": 0.010084183565804875,
+      "gamma_direct_mean": 0.01004459306775618,
+      "gamma_theorem5_mean": 0.010021136513284288,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.0023244364780221163
+      "relative_error_gamma": 0.002335239562346558
     },
     {
       "t": 0.25,
       "u": 0.5,
       "v": 0.75,
-      "rho_tu_mean": -0.2482794135729223,
-      "rho_tv_mean": -0.2430348666218309,
+      "rho_tu_mean": -0.2429675653890601,
+      "rho_tv_mean": -0.23778351956726904,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.005244546951091371,
-      "gamma_theorem5_mean": 0.005263572548368986,
+      "gamma_direct_mean": 0.005184045821791034,
+      "gamma_theorem5_mean": 0.005162618000856744,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.02047844456165647
+      "relative_error_gamma": 0.0070583143029459405
     },
     {
       "t": 0.25,
       "u": 0.5,
       "v": 1.0,
-      "rho_tu_mean": -0.2482794135729223,
-      "rho_tv_mean": -0.23785545597958527,
+      "rho_tu_mean": -0.2429675653890601,
+      "rho_tv_mean": -0.23266385879882284,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.010423957593337078,
-      "gamma_theorem5_mean": 0.010424121887357671,
+      "gamma_direct_mean": 0.010303706590237244,
+      "gamma_theorem5_mean": 0.01018946899892308,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.01540366096970562
+      "relative_error_gamma": 0.011875910733936
     },
     {
       "t": 0.25,
       "u": 0.75,
       "v": 0.75,
-      "rho_tu_mean": -0.4927397089332506,
-      "rho_tv_mean": -0.4927397089332506,
+      "rho_tu_mean": -0.4814649069841744,
+      "rho_tv_mean": -0.4814649069841744,
       "h_longevity_holds": true,
       "gamma_direct_mean": 0.0,
       "gamma_theorem5_mean": 0.0,
@@ -279,20 +279,20 @@
       "t": 0.25,
       "u": 0.75,
       "v": 1.0,
-      "rho_tu_mean": -0.4927397089332506,
-      "rho_tv_mean": -0.4847425573067817,
+      "rho_tu_mean": -0.4814649069841744,
+      "rho_tv_mean": -0.47360727635567434,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.007997151626468784,
-      "gamma_theorem5_mean": 0.008009780104266662,
+      "gamma_direct_mean": 0.007857630628499992,
+      "gamma_theorem5_mean": 0.007831207783672236,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.010371164833790145
+      "relative_error_gamma": 0.012466902963221461
     },
     {
       "t": 0.5,
       "u": 0.75,
       "v": 0.75,
-      "rho_tu_mean": -0.248577523015701,
-      "rho_tv_mean": -0.248577523015701,
+      "rho_tu_mean": -0.24222778081823712,
+      "rho_tv_mean": -0.24222778081823712,
       "h_longevity_holds": true,
       "gamma_direct_mean": 0.0,
       "gamma_theorem5_mean": 0.0,
@@ -303,18 +303,18 @@
       "t": 0.5,
       "u": 0.75,
       "v": 1.0,
-      "rho_tu_mean": -0.248577523015701,
-      "rho_tv_mean": -0.2425762922006636,
+      "rho_tu_mean": -0.24222778081823712,
+      "rho_tv_mean": -0.23629645001111865,
       "h_longevity_holds": true,
-      "gamma_direct_mean": 0.006001230815037368,
-      "gamma_theorem5_mean": 0.005968580251996005,
+      "gamma_direct_mean": 0.005931330807118464,
+      "gamma_theorem5_mean": 0.005870335437478152,
       "gamma_nonneg": true,
-      "relative_error_gamma": 0.011103871196651648
+      "relative_error_gamma": 0.01639934344591124
     }
   ],
   "normalization": {
     "rho_tu_zero_normalized_driver": 0.0,
-    "rho_tu_zero_nonnormalized_driver": 0.49979261601811414,
+    "rho_tu_zero_nonnormalized_driver": 0.5002810206849713,
     "normalized_driver_is_normalized": true,
     "nonnormalized_driver_is_normalized": false
   },
@@ -322,15 +322,15 @@
     {
       "u": 0.5,
       "v": 1.0,
-      "rho_tu_mean": -0.4983123034693095,
-      "rho_tv_mean": -0.4983123034693095,
+      "rho_tu_mean": -0.4984216079506698,
+      "rho_tv_mean": -0.4984216079506698,
       "restriction_holds": true
     },
     {
       "cash_additivity_check_m": 0.7,
-      "rho_tu_X": -0.4983123034693095,
-      "rho_tu_X_plus_m": -1.1987122097237708,
-      "rho_tu_X_minus_m_expected": -1.1983123034693095,
+      "rho_tu_X": -0.4984216079506698,
+      "rho_tu_X_plus_m": -1.1977089039354212,
+      "rho_tu_X_minus_m_expected": -1.1984216079506698,
       "cash_additivity_holds": true
     }
   ]

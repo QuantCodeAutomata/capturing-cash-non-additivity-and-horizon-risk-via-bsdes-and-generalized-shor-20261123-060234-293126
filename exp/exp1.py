@@ -153,9 +153,23 @@ def h_longevity_and_gamma(times, bm, t, u, v, h_func, c_func, r_func, x_at_u, ba
     return rho_tu, rho_tv, gamma_dir, gamma_formula
 
 
+def _parse_args() -> bool:
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--full", action="store_true",
+        help="use the paper's full Monte Carlo configuration (EXP1_N_PATHS_PAPER) "
+        "instead of the reduced run configuration (EXP1_N_PATHS_RUN)",
+    )
+    return parser.parse_args().full
+
+
 def main() -> None:
+    full = _parse_args()
     RESULTS_DIR.mkdir(exist_ok=True)
-    n_paths, n_steps = config.EXP1_N_PATHS_RUN, config.EXP1_N_STEPS
+    n_paths = config.EXP1_N_PATHS_PAPER if full else config.EXP1_N_PATHS_RUN
+    n_steps = config.EXP1_N_STEPS
     times, paths = simulate_brownian_paths(n_paths, n_steps, config.T_HORIZON, config.BM_DIMENSION, seed=config.RANDOM_SEED)
     bm = paths[:, :, 0]
     print(f"Simulated {n_paths} paths, {n_steps} steps, T={config.T_HORIZON}, d={config.BM_DIMENSION}")

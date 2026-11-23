@@ -26,8 +26,15 @@ def utility_identity(x: Vec) -> Vec:
 
 
 def utility_exponential(x: Vec, gamma: float = 1.0) -> Vec:
-    """U(x) = 1 - exp(-x/gamma), risk-aversion gamma > 0."""
-    return 1.0 - np.exp(-np.asarray(x, dtype=float) / gamma)
+    """U(x) = 1 - exp(-x/gamma), risk-aversion gamma > 0.
+
+    The exponent is clipped to the largest value representable in double
+    precision before exponentiating: for a very negative loss x the exact
+    value is U(x) -> -inf, so the clip only avoids a floating point overflow
+    warning and does not change any finite result.
+    """
+    exponent = np.clip(-np.asarray(x, dtype=float) / gamma, a_min=None, a_max=700.0)
+    return 1.0 - np.exp(exponent)
 
 
 def utility_exponential_inverse(y: Vec, gamma: float = 1.0) -> Vec:
@@ -73,8 +80,15 @@ def aggregator_linear(x: Vec, m: float, beta: float) -> Vec:
 
 
 def aggregator_exponential(x: Vec, m: float, nu: float) -> Vec:
-    """f(x,m) = 1 - exp(-nu*x - m), nu in (0,1), Example 19 ii)."""
-    return 1.0 - np.exp(-nu * np.asarray(x, dtype=float) - m)
+    """f(x,m) = 1 - exp(-nu*x - m), nu in (0,1), Example 19 ii).
+
+    The exponent is clipped at 700 (exp(700) already exceeds float64 range)
+    before exponentiating: this only affects values driven to -inf, which the
+    root finder never selects as the shortfall level, so it does not change
+    any reported quantity but avoids a spurious overflow warning.
+    """
+    exponent = np.clip(-nu * np.asarray(x, dtype=float) - m, -np.inf, 700.0)
+    return 1.0 - np.exp(exponent)
 
 
 # --------------------------------------------------------------------------
@@ -163,9 +177,14 @@ def entropic_dual_sup(
     """
     values = np.empty_like(theta_grid, dtype=float)
     for i, theta in enumerate(theta_grid):
-        log_mgf_theta = float(np.log(np.mean(np.exp(theta * x_samples))))
-        weights = np.exp(theta * x_samples - log_mgf_theta)
-        weights /= weights.sum()
+        # Center before exponentiating (log-sum-exp trick) to avoid float
+        # overflow for large |theta|; the tilted weights are unaffected since
+        # they are renormalized by weights.sum() below.
+        exponent = theta * x_samples
+        shift = float(np.max(exponent))
+        shifted = np.exp(exponent - shift)  # exponent - shift <= 0: never overflows
+        log_mgf_theta = shift + float(np.log(np.mean(shifted)))
+        weights = shifted / shifted.sum()  # same normalized weights, overflow-free
         e_q_minus_x = -float(np.sum(weights * x_samples))
         e_q_x = float(np.sum(weights * x_samples))
         relative_entropy = theta * e_q_x - log_mgf_theta
